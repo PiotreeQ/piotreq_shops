@@ -1,10 +1,14 @@
 ESX.RegisterServerCallback('piotreq_shop:PayForShopping', function(source, cb, data)
     local xPlayer = ESX.GetPlayerFromId(source)
     local moneyCount = xPlayer.getAccount(data.payment).money
-    if (moneyCount >= data.price) then
-        xPlayer.removeAccountMoney(data.payment, data.price)
-        for i = 1, #data.products, 1 do
-            exports.ox_inventory:AddItem(source, data.products[i].item, data.products[i].count)
+    local needToPay = 0
+    for i = 1, #data.products, 1 do
+        needToPay = needToPay + (data.products[i].price * data.products[i].count)
+    end
+    if (moneyCount >= needToPay) then
+        xPlayer.removeAccountMoney(data.payment, needToPay)
+        for j = 1, #data.products, 1 do
+            exports.ox_inventory:AddItem(source, data.products[j].item, data.products[j].count)
         end
         cb(true)
     else
