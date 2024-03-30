@@ -65,7 +65,7 @@ Citizen.CreateThread(function()
                                     return
                                 end
 
-                                local shopData = {payment = payment[1], price = totalPrice, products = myCart}
+                                local shopData = {payment = payment[1], products = myCart}
                                 ESX.TriggerServerCallback('piotreq_shop:PayForShopping', function(payed)
                                     if payed then
                                         myCart = {}
